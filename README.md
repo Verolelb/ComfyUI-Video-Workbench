@@ -1,92 +1,68 @@
-\# 🎬 ComfyUI Video Workbench
+# 🎬 ComfyUI Auto-Edit Workbench
 
+A powerful Custom Node for **ComfyUI** that acts as a **mini video editing studio**. 
+It automatically assembles (concatenates) multiple video clips from a folder into a single sequence, handling resolution resizing, aspect ratios, and frame rates intelligently.
 
+## ✨ Key Features
 
-A powerful Custom Node for ComfyUI that acts as a \*\*mini video editing workbench\*\*. 
+*   **Batch Assembly**: Loads all video files from a specific folder automatically.
+*   **3 Resize Modes**:
+    *   **Crop (Fill Screen)**: Fills the screen, cropping edges if necessary (perfect for mixing vertical/horizontal footage).
+    *   **Fit (Black Bars)**: Adds black borders (letterboxing) so the entire video is visible.
+    *   **Stretch**: Distorts the video to fit the target resolution perfectly.
+*   **Smart Strategies**:
+    *   **Resolution**: Auto-detect from the *First Video*, *Smallest*, *Largest*, or use a *Custom* size.
+    *   **FPS**: Auto-detect from *First Video*, *Lowest*, *Highest*, or *Custom*.
+*   **Audio Support**: Concatenates audio tracks seamlessly.
+*   **Safety Limits**: `limit_duration_sec` parameter to trim the output (great for testing without Out-Of-Memory errors).
 
-It automatically assembles (concatenates) multiple video clips from a folder into a single sequence, handling resolution resizing (crop/fill) and FPS matching intelligently.
+## 📦 Installation
 
+### Method 1: ComfyUI Manager (Recommended)
+1.  Install [ComfyUI Manager](https://github.com/ltdrdata/ComfyUI-Manager).
+2.  Click **"Install via Git URL"**.
+3.  Paste this repository URL: `https://github.com/Verolelb/ComfyUI-Video-Workbench`.
 
+### Method 2: Manual Installation
+1.  Navigate to your `ComfyUI/custom_nodes/` directory.
+2.  Clone this repository:
+    ```bash
+    git clone https://github.com/Verolelb/ComfyUI-Video-Workbench.git
+    ```
+3.  Open a terminal in this folder and install the requirement:
+    ```bash
+    pip install -r requirements.txt
+    ```
+    *(This node relies on `moviepy` and `numpy`).*
 
-\## ✨ Features
+## 🛠️ How to use
 
+### 1. Inputs
 
+*   **`directory_path`**: Absolute path to your video folder (e.g., `C:/Users/You/Desktop/MyClips`).
+*   **`sort_strategy`**: Order of clips (Alphabetical, Date, Random).
+*   **`resize_mode`**: 
+    *   Use **Crop** for immersive, full-screen montages (e.g., Shorts/Reels).
+    *   Use **Fit** to preserve all details with black bars.
+*   **`resolution_strategy`**: Keep it on **"First Video"** to let the first clip dictate the format of the whole timeline.
+*   **`fps_strategy`**: Keep on **"First Video"** or force a **Custom** value (e.g., 24, 30, 60).
 
-\*   \*\*Batch Assembly\*\*: Loads all video files from a specified folder.
+### 2. Outputs
 
-\*   \*\*Smart Resizing\*\*: Automatically handles mixed aspect ratios (Vertical TikToks + Horizontal YouTube).
+1.  **`IMAGE`**: The assembled video stream.
+2.  **`AUDIO`**: The combined audio track.
+3.  **`FLOAT` (fps)**: The final frame rate (useful to connect to the "frame_rate" input of saving nodes).
 
-&nbsp;   \*   \*Center Crop / Aspect Fill logic included.\*
+### 3. Recommended Workflow for Saving
 
-\*   \*\*Intelligent Strategies\*\*:
+To save the video **with audio**, it is highly recommended to use the **Video Combine** node from the [ComfyUI-VideoHelperSuite](https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite).
 
-&nbsp;   \*   \*\*Resolution\*\*: Can adapt to the \*First Video\*, the \*Smallest\*, the \*Largest\*, or a \*Custom\* size.
+*   Connect `AutoEditWorkbench` **IMAGE** -> `Video Combine` **images**.
+*   Connect `AutoEditWorkbench` **AUDIO** -> `Video Combine` **audio**.
+*   Connect `AutoEditWorkbench` **FPS** -> `Video Combine` **frame_rate** (Convert widget to input).
+*   Set format to **`video/h264-mp4`**.
 
-&nbsp;   \*   \*\*FPS\*\*: Can adapt to the \*First Video\*, \*Lowest\*, \*Highest\*, or \*Custom\*.
+## ❤️ Credits
 
-\*   \*\*Audio Support\*\*: Concatenates audio tracks perfectly.
-
-\*   \*\*Safety Limits\*\*: Duration limit parameter to prevent Out-Of-Memory errors during testing.
-
-
-
-\## 📦 Installation
-
-
-
-\### Method 1: ComfyUI Manager (Recommended)
-
-1\.  Install \[ComfyUI Manager](https://github.com/ltdrdata/ComfyUI-Manager).
-
-2\.  Search for "Video Workbench" (once indexed) or "Install via Git URL".
-
-3\.  Paste this repository URL.
-
-
-
-\### Method 2: Manual
-
-1\.  Go to your `ComfyUI/custom\_nodes/` directory.
-
-2\.  Clone this repo:
-
-&nbsp;   ```bash
-
-&nbsp;   git clone https://github.com/Verolelb/ComfyUI-Video-Workbench.git
-
-&nbsp;   ```
-
-3\.  Install dependencies:
-
-&nbsp;   ```bash
-
-&nbsp;   pip install -r requirements.txt
-
-&nbsp;   ```
-
-
-
-\## 🛠️ How to use
-
-
-
-1\.  \*\*Directory Path\*\*: Paste the absolute path to your folder containing video clips (e.g., `C:/Users/You/Videos/Vacation`).
-
-2\.  \*\*Sort Strategy\*\*: Choose how to order the clips (Alphabetical, Date, Random).
-
-3\.  \*\*Resolution \& FPS Strategy\*\*:
-
-&nbsp;   \*   Leave on \*\*"First Video"\*\* to let the first clip dictate the settings for the whole timeline.
-
-&nbsp;   \*   Use \*\*"Custom"\*\* to force specific dimensions (e.g., 1080x1920).
-
-
-
-\## ❤️ Credits
-
-
-
-Created by \*\*Verolelb\*\*.
-
-Powered by \[MoviePy](https://zulko.github.io/moviepy/).
-
+Created by **Verolelb**.
+Powered by [MoviePy](https://zulko.github.io/moviepy/).
