@@ -34,8 +34,10 @@ class AutoEditWorkbench:
             },
         }
 
-    RETURN_TYPES = ("IMAGE", "AUDIO")
-    RETURN_NAMES = ("images", "audio")
+    # AJOUT DE LA SORTIE FPS (FLOAT) ICI
+    RETURN_TYPES = ("IMAGE", "AUDIO", "FLOAT")
+    RETURN_NAMES = ("images", "audio", "fps")
+    
     FUNCTION = "process_workbench"
     CATEGORY = "VideoTools/Editing"
 
@@ -177,7 +179,8 @@ class AutoEditWorkbench:
         final_clip.close()
         for c in clips: c.close()
 
-        return (video_tensor, audio_dict)
+        # RETOUR AVEC LE FPS EN PLUS
+        return (video_tensor, audio_dict, float(target_fps))
 
 # Mappings for ComfyUI
 NODE_CLASS_MAPPINGS = {
